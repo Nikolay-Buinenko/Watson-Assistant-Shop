@@ -1,0 +1,81 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+
+.wrap_pr_add_chat {
+    margin: 15px 15px 15px 0;
+}
+.tab_wrapper_pr_add_chat {
+    border-bottom: 1px solid #c3c4c7;
+}
+.tab_wrapper_pr_add_chat:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+.tab_wrapper_pr_add_chat .nav-tab:first-child {
+    margin-left: 0;
+}
+.wrap_pr_add_chat form {
+    clear: both;
+    padding: 20px 0;
+}
+.wrap_pr_add_chat .tab-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+.wrap_pr_add_chat .message {
+    font-size: 16px;
+    margin: 0 0 20px;
+}
+.wrap_pr_add_chat .message.success {
+    /*color: #18c535;*/
+}
+.wrap_pr_add_chat .list_n_plugins {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.wrap_pr_add_chat .list_n_plugins li {
+    display: flex;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+.wrap_pr_add_chat .list_n_plugins li:last-child {
+    margin-bottom: 0;
+}
+.wrap_pr_add_chat .list_n_plugins .checkbox_wrap {
+    margin-right: 10px;
+}
+.wrap_pr_add_chat .list_n_plugins span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wrap_pr_add_chat .list_n_plugins .dashicons-yes:before{
+    color: #12b745;
+    font-size: 27px;
+}
+.wrap_pr_add_chat .list_n_plugins .dashicons-no:before{
+    color: #ff1919;
+    font-size: 27px;
+}
+.wrap_pr_add_chat .wrap_btn {
+    margin: 40px 0 0;
+}
+.wrap_pr_add_chat  .btn_next_tab {
+    background: #2271b1;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: #fff;
+}
