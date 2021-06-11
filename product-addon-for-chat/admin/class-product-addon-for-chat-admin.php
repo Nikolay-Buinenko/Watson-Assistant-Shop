@@ -183,29 +183,185 @@ class Product_Addon_For_Chat_Admin {
     <?php }
 
     public static function init_credential_settings() {
+
+        //Будем показывать наиболее подходящие результаты, от того, что ищет пользователь
+        // Для начала, настройки вида вывода результатов:  ссылки (on/off); +
+        //  картинки (on/off); +
+        //  количество доступных товаров (on/off); +
+        //  количество результатов поиска в чате (указать кол-тво). +
+        // Далее просмотр истории и возможность подключения к  активному чату (это все есть в фигме).
+
         $settings_page = self::SLUG;
 
         add_settings_section('watson_product_addon_for_chat_credentials', 'Product Addon For Chat Credentials',
             array(__CLASS__, 'workspace_description'), $settings_page);
 
-//        add_settings_field('watsonconv_enabled', '', array(__CLASS__, 'render_enabled'),
-//            $settings_page, 'watson_product_addon_for_chat_credentials');
-//
-//        add_settings_field('watsonconv_workspace_url', 'Assistant URL', array(__CLASS__, 'render_url'),
-//            $settings_page, 'watson_product_addon_for_chat_credentials');
-//
-//        add_settings_field('watsonconv_username', 'Username', array(__CLASS__, 'render_username'),
-//            $settings_page, 'watson_product_addon_for_chat_credentials');
-//
-//        add_settings_field('watsonconv_api_key', 'API Key', array(__CLASS__, 'render_api_key'),
-//            $settings_page, 'watson_product_addon_for_chat_credentials');
-//
-//        register_setting(self::SLUG, 'watson_product_addon_for_chat_credentials', array(__CLASS__, 'validate_credentials'));
+        add_settings_field('watson_product_addon_for_chat_enabled', 'Enabled Addon', array(__CLASS__, 'render_enabled_addon'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_show_product_links_enabled', 'Show product links in search results', array(__CLASS__, 'render_show_product_links'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_show_image_product_enabled', 'Show image product in search results', array(__CLASS__, 'render_show_image_product'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_show_count_of_items_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_items'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_show_count_of_search_results_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_search_results'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        register_setting(self::SLUG, 'watson_product_addon_for_chat_credentials', array(__CLASS__, 'validate_credentials'));
+
+        settings_fields( 'watson_product_addon_for_chat_credentials' );
 
     }
 
     public static function workspace_description($args) {
 
+    }
+
+    public static function render_enabled_addon() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        ?>
+        <fieldset>
+            <input
+                type="checkbox" id="watson_product_addon_for_chat_enabled"
+                name="watson_product_addon_for_chat_credentials[enabled]"
+                value="true"
+
+                <?php echo $enabled ? 'checked' : '' ?>
+            />
+            <label for="watson_product_addon_for_chat_enabled">
+                Enable
+            </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_show_product_links() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        ?>
+        <fieldset>
+            <input
+                    type="checkbox" id="watson_product_addon_for_chat_show_product_links_enabled"
+                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    value="true"
+
+                <?php echo $enabled ? 'checked' : '' ?>
+            />
+            <label for="watson_product_addon_for_chat_show_product_links">
+                Enable
+            </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_show_image_product() {
+        $credentials = get_option('watson_product_addon_for_chat_show_image_product_enabled');
+        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        ?>
+        <fieldset>
+            <input
+                    type="checkbox" id="watson_product_addon_for_chat_show_image_product_enabled"
+                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    value="true"
+
+                <?php echo $enabled ? 'checked' : '' ?>
+            />
+            <label for="watson_product_addon_for_chat_show_image_product_enabled">
+                Enable
+            </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_show_count_of_items() {
+        $credentials = get_option('watson_product_addon_for_chat_show_count_of_items_enabled');
+        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        ?>
+        <fieldset>
+            <input
+                    type="checkbox" id="watson_product_addon_for_chat_show_count_of_items_enabled"
+                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    value="true"
+
+                <?php echo $enabled ? 'checked' : '' ?>
+            />
+            <label for="watson_product_addon_for_chat_show_count_of_items_enabled">
+                Enable
+            </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_show_count_of_search_results() {
+        $credentials = get_option('watson_product_addon_for_chat_show_count_of_items_enabled');
+        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        ?>
+        <fieldset>
+            <input
+                    type="checkbox" id="watson_product_addon_for_chat_show_count_of_search_results_enabled"
+                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    value="true"
+
+                <?php echo $enabled ? 'checked' : '' ?>
+            />
+            <label for="watson_product_addon_for_chat_show_count_of_search_results_enabled">
+                Enable
+            </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function validate_credentials($credentials) {
+
+        $old_credentials = get_option('watson_product_addon_for_chat_credentials');
+
+        if (!isset($credentials['enabled'])) {
+            $old_credentials['enabled'] = 'false';
+            return $old_credentials;
+        }
+
+//        if (empty($credentials['workspace_url'])) {
+//            add_settings_error('watsonconv_credentials', 'invalid-id', 'Please enter an Assistant URL.');
+//            $empty = true;
+//        }
+//
+//        if ($credentials['type'] == 'iam') {
+//            if (empty($credentials['api_key'])) {
+//                add_settings_error('watsonconv_credentials', 'invalid-api-key', 'Please enter an API key.');
+//                $empty = true;
+//            }
+//        } else {
+//            if (empty($credentials['username'])) {
+//                add_settings_error('watsonconv_credentials', 'invalid-username', 'Please enter a username.');
+//                $empty = true;
+//            }
+//            if (empty($credentials['api_key'])) {
+//                add_settings_error('watsonconv_credentials', 'invalid-api-key', 'Please enter an API key.');
+//                $empty = true;
+//            }
+//        }
+//
+//        if (isset($empty)) {
+//            return $old_credentials;
+//        }
+
+        if ($credentials == $old_credentials) {
+            return $credentials;
+        }
+
+        add_settings_error(
+            'watson_product_addon_for_chat_credentials',
+            'valid-credentials',
+            'Options has been saved',
+            'updated'
+        );
+
+        return $credentials;
     }
 
 }
