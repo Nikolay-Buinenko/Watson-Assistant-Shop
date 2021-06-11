@@ -22,6 +22,8 @@
  */
 class Product_Addon_For_Chat_Admin {
 
+    const SLUG = 'watson_product_addon_for_chat';
+
 	/**
 	 * The ID of this plugin.
 	 *
@@ -52,7 +54,7 @@ class Product_Addon_For_Chat_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->build_admin_setting_page();
-
+        add_action('admin_init', array( $this, 'init_credential_settings'));
 	}
 
 	/**
@@ -113,21 +115,12 @@ class Product_Addon_For_Chat_Admin {
 
     public function add_admin_setting_page() {
 
-//        add_menu_page(
-//            'Product Addon Options',
-//            'Product Addon For Chat',
-//            'manage_options',
-//            'product-addon-options',
-//            array (&$this, 'render_admin_setting_page'),
-//            'dashicons-admin-comments'
-//        );
-
         add_submenu_page(
             SLUG_WATSON_ASSISTANT_PAGE,
             'Product Addon Options',
             'Product Addon For Chat',
             'manage_options',
-            'watson_product_addon_for_chat',
+            self::SLUG,
             array (&$this, 'render_admin_setting_page')
         );
 
@@ -181,9 +174,38 @@ class Product_Addon_For_Chat_Admin {
 
             <div class="tab-page workspace_page" style="display: none">
 
+                <?php do_settings_sections(self::SLUG) ?>
+                <?php submit_button(); ?>
+
             </div>
         </form>
 
     <?php }
+
+    public static function init_credential_settings() {
+        $settings_page = self::SLUG;
+
+        add_settings_section('watson_product_addon_for_chat_credentials', 'Product Addon For Chat Credentials',
+            array(__CLASS__, 'workspace_description'), $settings_page);
+
+//        add_settings_field('watsonconv_enabled', '', array(__CLASS__, 'render_enabled'),
+//            $settings_page, 'watson_product_addon_for_chat_credentials');
+//
+//        add_settings_field('watsonconv_workspace_url', 'Assistant URL', array(__CLASS__, 'render_url'),
+//            $settings_page, 'watson_product_addon_for_chat_credentials');
+//
+//        add_settings_field('watsonconv_username', 'Username', array(__CLASS__, 'render_username'),
+//            $settings_page, 'watson_product_addon_for_chat_credentials');
+//
+//        add_settings_field('watsonconv_api_key', 'API Key', array(__CLASS__, 'render_api_key'),
+//            $settings_page, 'watson_product_addon_for_chat_credentials');
+//
+//        register_setting(self::SLUG, 'watson_product_addon_for_chat_credentials', array(__CLASS__, 'validate_credentials'));
+
+    }
+
+    public static function workspace_description($args) {
+
+    }
 
 }
