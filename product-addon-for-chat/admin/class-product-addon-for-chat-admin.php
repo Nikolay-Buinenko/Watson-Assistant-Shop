@@ -130,7 +130,8 @@ class Product_Addon_For_Chat_Admin {
 
         <div class="wrap_pr_add_chat">
             <h2><?php esc_html_e('Product Addon For Chat'); ?></h2>
-            <?php self::render_content_setting_page(); ?>
+            <?php settings_errors();
+            self::render_content_setting_page(); ?>
         </div>
 
     <?php }
@@ -170,7 +171,7 @@ class Product_Addon_For_Chat_Admin {
                 </div>
             </div>
 
-            <?php settings_fields('product-addon-options'); ?>
+            <?php settings_fields(self::SLUG); ?>
 
             <div class="tab-page workspace_page" style="display: none">
 
@@ -196,7 +197,7 @@ class Product_Addon_For_Chat_Admin {
         add_settings_section('watson_product_addon_for_chat_credentials', 'Product Addon For Chat Credentials',
             array(__CLASS__, 'workspace_description'), $settings_page);
 
-        add_settings_field('watson_product_addon_for_chat_enabled', 'Enabled Addon', array(__CLASS__, 'render_enabled_addon'),
+        add_settings_field('watson_product_addon_for_chat_enabled', 'Enabled Search Product', array(__CLASS__, 'render_enabled_addon'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
         add_settings_field('watson_product_addon_for_chat_show_product_links_enabled', 'Show product links in search results', array(__CLASS__, 'render_show_product_links'),
@@ -208,7 +209,13 @@ class Product_Addon_For_Chat_Admin {
         add_settings_field('watson_product_addon_for_chat_show_count_of_items_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_items'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
-        add_settings_field('watson_product_addon_for_chat_show_count_of_search_results_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_search_results'),
+        add_settings_field('watson_product_addon_for_chat_show_count_of_items_in_search_results_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_search_results'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_count_of_items_in_search_results', 'Count of items in search results', array(__CLASS__, 'render_count_of_items_in_search_results'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_search_command', 'Search command for chat', array(__CLASS__, 'render_search_command'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
         register_setting(self::SLUG, 'watson_product_addon_for_chat_credentials', array(__CLASS__, 'validate_credentials'));
@@ -242,17 +249,17 @@ class Product_Addon_For_Chat_Admin {
 
     public static function render_show_product_links() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        $enabled = (isset($credentials['show_product_links_enabled']) ? $credentials['show_product_links_enabled'] : 'true') == 'true';
         ?>
         <fieldset>
             <input
                     type="checkbox" id="watson_product_addon_for_chat_show_product_links_enabled"
-                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    name="watson_product_addon_for_chat_credentials[show_product_links_enabled]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
             />
-            <label for="watson_product_addon_for_chat_show_product_links">
+            <label for="watson_product_addon_for_chat_show_product_links_enabled">
                 Enable
             </label>
         </fieldset>
@@ -260,13 +267,13 @@ class Product_Addon_For_Chat_Admin {
     }
 
     public static function render_show_image_product() {
-        $credentials = get_option('watson_product_addon_for_chat_show_image_product_enabled');
-        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['show_image_product_enabled']) ? $credentials['show_image_product_enabled'] : 'true') == 'true';
         ?>
         <fieldset>
             <input
                     type="checkbox" id="watson_product_addon_for_chat_show_image_product_enabled"
-                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    name="watson_product_addon_for_chat_credentials[show_image_product_enabled]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
@@ -279,13 +286,13 @@ class Product_Addon_For_Chat_Admin {
     }
 
     public static function render_show_count_of_items() {
-        $credentials = get_option('watson_product_addon_for_chat_show_count_of_items_enabled');
-        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['show_count_of_items_enabled']) ? $credentials['show_count_of_items_enabled'] : 'true') == 'true';
         ?>
         <fieldset>
             <input
                     type="checkbox" id="watson_product_addon_for_chat_show_count_of_items_enabled"
-                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    name="watson_product_addon_for_chat_credentials[show_count_of_items_enabled]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
@@ -298,20 +305,51 @@ class Product_Addon_For_Chat_Admin {
     }
 
     public static function render_show_count_of_search_results() {
-        $credentials = get_option('watson_product_addon_for_chat_show_count_of_items_enabled');
-        $enabled = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true') == 'true';
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['show_count_of_items_in_search_results_enabled']) ? $credentials['show_count_of_items_in_search_results_enabled'] : 'true') == 'true';
         ?>
         <fieldset>
             <input
-                    type="checkbox" id="watson_product_addon_for_chat_show_count_of_search_results_enabled"
-                    name="watson_product_addon_for_chat_credentials[enabled]"
+                    type="checkbox" id="watson_product_addon_for_chat_show_count_of_items_in_search_results_enabled"
+                    name="watson_product_addon_for_chat_credentials[show_count_of_items_in_search_results_enabled]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
             />
-            <label for="watson_product_addon_for_chat_show_count_of_search_results_enabled">
+            <label for="watson_product_addon_for_chat_show_count_of_items_in_search_results_enabled">
                 Enable
             </label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_count_of_items_in_search_results() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        ?>
+        <fieldset>
+            <input
+                    type="number" id="watson_product_addon_for_chat_count_of_items_in_search_results"
+                    name="watson_product_addon_for_chat_credentials[count_of_items_in_search_results]"
+                    min="0"
+                    max="100"
+                    value="<?php echo (isset($credentials['count_of_items_in_search_results']) ? $credentials['count_of_items_in_search_results'] : 0 );?>"
+            />
+            <label for="watson_product_addon_for_chat_count_of_items_in_search_results"></label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_search_command() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        ?>
+        <fieldset>
+            <input
+                    type="text" id="watson_product_addon_for_chat_search_command"
+                    name="watson_product_addon_for_chat_credentials[search_command]"
+                    placeholder="/search_product"
+                    value="<?php echo (isset($credentials['search_command']) ? $credentials['search_command'] : '' );?>"
+            />
+            <label for="watson_product_addon_for_chat_search_command"></label>
         </fieldset>
         <?php
     }
@@ -325,30 +363,10 @@ class Product_Addon_For_Chat_Admin {
             return $old_credentials;
         }
 
-//        if (empty($credentials['workspace_url'])) {
-//            add_settings_error('watsonconv_credentials', 'invalid-id', 'Please enter an Assistant URL.');
-//            $empty = true;
-//        }
-//
-//        if ($credentials['type'] == 'iam') {
-//            if (empty($credentials['api_key'])) {
-//                add_settings_error('watsonconv_credentials', 'invalid-api-key', 'Please enter an API key.');
-//                $empty = true;
-//            }
-//        } else {
-//            if (empty($credentials['username'])) {
-//                add_settings_error('watsonconv_credentials', 'invalid-username', 'Please enter a username.');
-//                $empty = true;
-//            }
-//            if (empty($credentials['api_key'])) {
-//                add_settings_error('watsonconv_credentials', 'invalid-api-key', 'Please enter an API key.');
-//                $empty = true;
-//            }
-//        }
-//
-//        if (isset($empty)) {
-//            return $old_credentials;
-//        }
+        if ($credentials['count_of_items_in_search_results'] < 0 ) {
+            add_settings_error('watson_product_addon_for_chat_credentials', 'invalid-count-of-items-in-search-results', 'Incorrect value of the count of products in the search result.');
+            return $old_credentials;
+        }
 
         if ($credentials == $old_credentials) {
             return $credentials;
@@ -357,7 +375,7 @@ class Product_Addon_For_Chat_Admin {
         add_settings_error(
             'watson_product_addon_for_chat_credentials',
             'valid-credentials',
-            'Options has been saved',
+            'Options has been saved.',
             'updated'
         );
 

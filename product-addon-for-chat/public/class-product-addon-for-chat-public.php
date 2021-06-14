@@ -100,4 +100,18 @@ class Product_Addon_For_Chat_Public {
 
 	}
 
+    public function plugin_data_global_var(){
+
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $addon_status = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true');
+        $search_command = (isset($credentials['search_command']) && $credentials['search_command'] != '' ? $credentials['search_command'] : '/search_product' );
+
+        wp_localize_script( $this->plugin_name, 'data_global_var_product_addon',
+            array(
+                'pafc_addon_status' => $addon_status,
+                'pafc_seach_command' => $search_command
+            )
+        );
+    }
+
 }

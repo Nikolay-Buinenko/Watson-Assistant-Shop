@@ -79,3 +79,6 @@
     border-radius: 3px;
     color: #fff;
 }
+.wrap_pr_add_chat .form-table th {
+    width: 400px;
+}
