@@ -109,9 +109,66 @@ class Product_Addon_For_Chat_Public {
         wp_localize_script( $this->plugin_name, 'data_global_var_product_addon',
             array(
                 'pafc_addon_status' => $addon_status,
-                'pafc_seach_command' => $search_command
+                'pafc_search_command' => $search_command,
+                'ajax_url' => admin_url('admin-ajax.php')
             )
         );
+    }
+
+    public function pafc_search_product() {
+
+        $message = $_POST['message'];
+        $search_command = $_POST['search_command'];
+        $split_message = explode($search_command, $message);
+        $search_query = trim($split_message[1]);
+
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $show_product_links                    = (isset($credentials['show_product_links_enabled']) ? $credentials['show_product_links_enabled'] : 'true') == 'true';
+        $show_image_product                    = (isset($credentials['show_image_product_enabled']) ? $credentials['show_image_product_enabled'] : 'true') == 'true';
+        $show_count_of_items                   = (isset($credentials['show_count_of_items_enabled']) ? $credentials['show_count_of_items_enabled'] : 'true') == 'true';
+        $count_of_items_in_search_results      = (isset($credentials['count_of_items_in_search_results']) ? $credentials['count_of_items_in_search_results'] : 0 );
+        $html_response = "";
+
+        $args = array(
+            'posts_per_page' => $count_of_items_in_search_results,
+            'post_type' => 'product',
+            'post_status' => 'publish',
+            's' => $search_query
+        );
+        $query = new WP_Query( $args );
+
+        if ( $query->have_posts() ) {
+            while ( $query->have_posts() ) {
+                $query->the_post();
+                $image = "";
+                if ( !!$show_image_product ) {
+                    $image_url = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ));
+                    $image = "<span class=\"wrap_img\"><img src=\"$image_url[0]\" alt=\"product_img\"></span>";
+                }
+                $product_link = get_permalink( get_the_ID() );
+                $product_title = get_the_title( get_the_ID() );
+                if ( !!$show_product_links ) {
+                    $html_response .= "<a href=\"$product_link\" class=\"pafc_product_item\">
+                        $image
+                        <span class=\"product_title\">$product_title</span>
+                    </a>";
+                } else {
+                    $html_response .= "<div class=\"pafc_product_item\">
+                        $image
+                        <span class=\"product_title\">$product_title</span>
+                    </div>";
+                }
+            }
+        }
+
+        wp_reset_postdata();
+
+        //echo "show_product_links_enabled: ". !!$show_product_links ."; show_image_product_enabled: ". !!$show_image_product ."; show_count_of_items_enabled: ". !!$show_count_of_items ."; count_of_items_in_search_results: $count_of_items_in_search_results";
+
+        echo $html_response;
+
+        wp_die();
+
     }
 
 }
