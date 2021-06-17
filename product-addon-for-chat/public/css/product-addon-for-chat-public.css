@@ -2,3 +2,28 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+.pafc_product_item {
+    display: inline-block;
+    margin: 5px 0 5px;
+    width: 100%;
+    border-radius: 1.4em;
+    background-color: #fff;
+    padding: 10px;
+}
+div.pafc_product_item .product_title, div.pafc_product_item .product_stock {
+    color: #000;
+}
+.pafc_product_item .wrap_img {
+    display: flex;
+    margin: 0 0 10px;
+    justify-content: center;
+}
+.pafc_product_item img {
+    border-radius: 1.4em;
+}
+.pafc_product_item .product_title, .pafc_product_item .product_stock {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}

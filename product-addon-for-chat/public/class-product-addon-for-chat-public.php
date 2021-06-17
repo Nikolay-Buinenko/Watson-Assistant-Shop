@@ -123,9 +123,9 @@ class Product_Addon_For_Chat_Public {
         $search_query = trim($split_message[1]);
 
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $show_product_links                    = (isset($credentials['show_product_links_enabled']) ? $credentials['show_product_links_enabled'] : 'true') == 'true';
-        $show_image_product                    = (isset($credentials['show_image_product_enabled']) ? $credentials['show_image_product_enabled'] : 'true') == 'true';
-        $show_count_of_items                   = (isset($credentials['show_count_of_items_enabled']) ? $credentials['show_count_of_items_enabled'] : 'true') == 'true';
+        $show_product_links                    = (isset($credentials['product_links']) ? true : false);
+        $show_image_product                    = (isset($credentials['image_product']) ? true : false);
+        $show_count_of_items                   = (isset($credentials['count_of_items']) ? true : false);
         $count_of_items_in_search_results      = (isset($credentials['count_of_items_in_search_results']) ? $credentials['count_of_items_in_search_results'] : 0 );
         $html_response = "";
 
@@ -141,21 +141,29 @@ class Product_Addon_For_Chat_Public {
             while ( $query->have_posts() ) {
                 $query->the_post();
                 $image = "";
-                if ( !!$show_image_product ) {
+                $stock = "";
+                global $product;
+                if ( $show_count_of_items ) {
+                    $stock = __("Stock quantity: ") . $product->get_stock_quantity();
+                    $stock = "<span class=\"product_stock\">$stock</span>";
+                }
+                if ( $show_image_product ) {
                     $image_url = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ));
                     $image = "<span class=\"wrap_img\"><img src=\"$image_url[0]\" alt=\"product_img\"></span>";
                 }
                 $product_link = get_permalink( get_the_ID() );
                 $product_title = get_the_title( get_the_ID() );
-                if ( !!$show_product_links ) {
-                    $html_response .= "<a href=\"$product_link\" class=\"pafc_product_item\">
+                if ( $show_product_links ) {
+                    $html_response .= "<a href=\"$product_link\" target=\"_blank\" class=\"pafc_product_item\">
                         $image
                         <span class=\"product_title\">$product_title</span>
+                        $stock
                     </a>";
                 } else {
                     $html_response .= "<div class=\"pafc_product_item\">
                         $image
                         <span class=\"product_title\">$product_title</span>
+                        $stock
                     </div>";
                 }
             }

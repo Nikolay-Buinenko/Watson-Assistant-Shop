@@ -193,13 +193,13 @@ class Product_Addon_For_Chat_Admin {
         add_settings_field('watson_product_addon_for_chat_enabled', 'Enabled Search Product', array(__CLASS__, 'render_enabled_addon'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
-        add_settings_field('watson_product_addon_for_chat_show_product_links_enabled', 'Show product links in search results', array(__CLASS__, 'render_show_product_links'),
+        add_settings_field('watson_product_addon_for_chat_product_links', 'Show product links in search results', array(__CLASS__, 'render_product_links'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
-        add_settings_field('watson_product_addon_for_chat_show_image_product_enabled', 'Show image product in search results', array(__CLASS__, 'render_show_image_product'),
+        add_settings_field('watson_product_addon_for_chat_image_product', 'Show image product in search results', array(__CLASS__, 'render_image_product'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
-        add_settings_field('watson_product_addon_for_chat_show_count_of_items_enabled', 'Show count of items in stock in search results', array(__CLASS__, 'render_show_count_of_items'),
+        add_settings_field('watson_product_addon_for_chat_count_of_items', 'Show count of items in stock in search results', array(__CLASS__, 'render_count_of_items'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
         add_settings_field('watson_product_addon_for_chat_count_of_items_in_search_results', 'Count of items in search results', array(__CLASS__, 'render_count_of_items_in_search_results'),
@@ -235,57 +235,57 @@ class Product_Addon_For_Chat_Admin {
         <?php
     }
 
-    public static function render_show_product_links() {
+    public static function render_product_links() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['show_product_links_enabled']) ? $credentials['show_product_links_enabled'] : 'true') == 'true';
+        $enabled = (isset($credentials['product_links']) ? true : false);
         ?>
         <fieldset>
             <input
-                    type="checkbox" id="watson_product_addon_for_chat_show_product_links_enabled"
-                    name="watson_product_addon_for_chat_credentials[show_product_links_enabled]"
+                    type="checkbox" id="watson_product_addon_for_chat_product_links"
+                    name="watson_product_addon_for_chat_credentials[product_links]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
             />
-            <label for="watson_product_addon_for_chat_show_product_links_enabled">
+            <label for="watson_product_addon_for_chat_product_links">
                 Enable
             </label>
         </fieldset>
         <?php
     }
 
-    public static function render_show_image_product() {
+    public static function render_image_product() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['show_image_product_enabled']) ? $credentials['show_image_product_enabled'] : 'true') == 'true';
+        $enabled = (isset($credentials['image_product']) ? true : false);
         ?>
         <fieldset>
             <input
-                    type="checkbox" id="watson_product_addon_for_chat_show_image_product_enabled"
-                    name="watson_product_addon_for_chat_credentials[show_image_product_enabled]"
+                    type="checkbox" id="watson_product_addon_for_chat_image_product"
+                    name="watson_product_addon_for_chat_credentials[image_product]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
             />
-            <label for="watson_product_addon_for_chat_show_image_product_enabled">
+            <label for="watson_product_addon_for_chat_image_product">
                 Enable
             </label>
         </fieldset>
         <?php
     }
 
-    public static function render_show_count_of_items() {
+    public static function render_count_of_items() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['show_count_of_items_enabled']) ? $credentials['show_count_of_items_enabled'] : 'true') == 'true';
+        $enabled = (isset($credentials['count_of_items']) ? true : false);
         ?>
         <fieldset>
             <input
-                    type="checkbox" id="watson_product_addon_for_chat_show_count_of_items_enabled"
-                    name="watson_product_addon_for_chat_credentials[show_count_of_items_enabled]"
+                    type="checkbox" id="watson_product_addon_for_chat_count_of_items"
+                    name="watson_product_addon_for_chat_credentials[count_of_items]"
                     value="true"
 
                 <?php echo $enabled ? 'checked' : '' ?>
             />
-            <label for="watson_product_addon_for_chat_show_count_of_items_enabled">
+            <label for="watson_product_addon_for_chat_count_of_items">
                 Enable
             </label>
         </fieldset>

@@ -36,6 +36,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
 $status_plugin_active_woocommerce = is_plugin_active('woocommerce/woocommerce.php');
 
 define( 'PRODUCT_ADDON_FOR_CHAT_VERSION', '1.0.0' );
