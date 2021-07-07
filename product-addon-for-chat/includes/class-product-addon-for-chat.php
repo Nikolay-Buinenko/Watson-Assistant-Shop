@@ -177,6 +177,8 @@ class Product_Addon_For_Chat {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'plugin_data_global_var');
 
+        $this->loader->add_filter('watsonconv_control_filters', $plugin_public, 'add_addon_control_button', 1);
+
 	}
 
 	/**

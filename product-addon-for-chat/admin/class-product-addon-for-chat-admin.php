@@ -205,7 +205,13 @@ class Product_Addon_For_Chat_Admin {
         add_settings_field('watson_product_addon_for_chat_count_of_items_in_search_results', 'Count of items in search results', array(__CLASS__, 'render_count_of_items_in_search_results'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
-        add_settings_field('watson_product_addon_for_chat_search_command', 'Search command for chat', array(__CLASS__, 'render_search_command'),
+//        add_settings_field('watson_product_addon_for_chat_search_command', 'Search command for chat', array(__CLASS__, 'render_search_command'),
+//            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_show_search_button', 'Show search button in control list', array(__CLASS__, 'render_show_search_button'),
+            $settings_page, 'watson_product_addon_for_chat_credentials');
+
+        add_settings_field('watson_product_addon_for_chat_server_return_text', 'It text, that server return user', array(__CLASS__, 'render_server_return_text'),
             $settings_page, 'watson_product_addon_for_chat_credentials');
 
         register_setting(self::SLUG, 'watson_product_addon_for_chat_credentials', array(__CLASS__, 'validate_credentials'));
@@ -237,37 +243,62 @@ class Product_Addon_For_Chat_Admin {
 
     public static function render_product_links() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['product_links']) ? true : false);
-        ?>
-        <fieldset>
-            <input
-                    type="checkbox" id="watson_product_addon_for_chat_product_links"
-                    name="watson_product_addon_for_chat_credentials[product_links]"
-                    value="true"
+        $enabled = (isset($credentials['product_links']) ? $credentials['product_links'] : "true");
 
-                <?php echo $enabled ? 'checked' : '' ?>
-            />
-            <label for="watson_product_addon_for_chat_product_links">
-                Enable
+        ?>
+
+        <fieldset class="view_column">
+            <label for="watson_product_addon_for_chat_product_links_y">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_product_links_y"
+                        name="watson_product_addon_for_chat_credentials[product_links]"
+                        value="true"
+
+                    <?php echo $enabled == "true" ? "checked" : "" ?>
+                />
+                Yes
+            </label>
+
+            <label for="watson_product_addon_for_chat_product_links_n">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_product_links_n"
+                        name="watson_product_addon_for_chat_credentials[product_links]"
+                        value="false"
+
+                    <?php echo $enabled == "false" ? "checked" : "" ?>
+                />
+                No
             </label>
         </fieldset>
+
         <?php
     }
 
     public static function render_image_product() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['image_product']) ? true : false);
+        $enabled = (isset($credentials['image_product']) ? $credentials['image_product'] : "true");
         ?>
-        <fieldset>
-            <input
-                    type="checkbox" id="watson_product_addon_for_chat_image_product"
-                    name="watson_product_addon_for_chat_credentials[image_product]"
-                    value="true"
+        <fieldset class="view_column">
+            <label for="watson_product_addon_for_chat_image_product_y">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_image_product_y"
+                        name="watson_product_addon_for_chat_credentials[image_product]"
+                        value="true"
 
-                <?php echo $enabled ? 'checked' : '' ?>
-            />
-            <label for="watson_product_addon_for_chat_image_product">
-                Enable
+                    <?php echo $enabled == "true" ? "checked" : "" ?>
+                />
+                Yes
+            </label>
+
+            <label for="watson_product_addon_for_chat_image_product_n">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_image_product_n"
+                        name="watson_product_addon_for_chat_credentials[image_product]"
+                        value="false"
+
+                    <?php echo $enabled == "false" ? "checked" : "" ?>
+                />
+                No
             </label>
         </fieldset>
         <?php
@@ -275,18 +306,29 @@ class Product_Addon_For_Chat_Admin {
 
     public static function render_count_of_items() {
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $enabled = (isset($credentials['count_of_items']) ? true : false);
+        $enabled = (isset($credentials['count_of_items']) ? $credentials['count_of_items'] : "true");
         ?>
-        <fieldset>
-            <input
-                    type="checkbox" id="watson_product_addon_for_chat_count_of_items"
-                    name="watson_product_addon_for_chat_credentials[count_of_items]"
-                    value="true"
+        <fieldset class="view_column">
+            <label for="watson_product_addon_for_chat_count_of_items_y">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_count_of_items_y"
+                        name="watson_product_addon_for_chat_credentials[count_of_items]"
+                        value="true"
 
-                <?php echo $enabled ? 'checked' : '' ?>
-            />
-            <label for="watson_product_addon_for_chat_count_of_items">
-                Enable
+                    <?php echo $enabled == "true" ? "checked" : "" ?>
+                />
+                Yes
+            </label>
+
+            <label for="watson_product_addon_for_chat_count_of_items_n">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_count_of_items_n"
+                        name="watson_product_addon_for_chat_credentials[count_of_items]"
+                        value="false"
+
+                    <?php echo $enabled == "false" ? "checked" : "" ?>
+                />
+                No
             </label>
         </fieldset>
         <?php
@@ -319,6 +361,56 @@ class Product_Addon_For_Chat_Admin {
                     value="<?php echo (isset($credentials['search_command']) ? $credentials['search_command'] : '' );?>"
             />
             <label for="watson_product_addon_for_chat_search_command"></label>
+        </fieldset>
+        <?php
+    }
+
+    public static function render_show_search_button() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['show_search_button']) ? $credentials['show_search_button'] : "true");
+
+        ?>
+
+        <fieldset class="view_column">
+            <label for="watson_product_addon_for_chat_show_search_button_y">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_show_search_button_y"
+                        name="watson_product_addon_for_chat_credentials[show_search_button]"
+                        value="true"
+
+                    <?php echo $enabled == "true" ? "checked" : "" ?>
+                />
+                Yes
+            </label>
+
+            <label for="watson_product_addon_for_chat_show_search_button_n">
+                <input
+                        type="radio" id="watson_product_addon_for_chat_show_search_button_n"
+                        name="watson_product_addon_for_chat_credentials[show_search_button]"
+                        value="false"
+
+                    <?php echo $enabled == "false" ? "checked" : "" ?>
+                />
+                No
+            </label>
+        </fieldset>
+
+        <?php
+    }
+
+    public static function render_server_return_text() {
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $input_text = isset($credentials['server_return_text']) ? $credentials['server_return_text'] : '';
+        ?>
+        <fieldset>
+            <textarea
+                    id="watson_product_addon_for_chat_server_return_text"
+                    type="text"
+                    name="watson_product_addon_for_chat_credentials[server_return_text]"
+                    placeholder=""
+                    value="<?php echo (isset($credentials['server_return_text']) ? $credentials['server_return_text'] : '' );?>"
+            ><?php echo $input_text;?></textarea>
+            <label for="watson_product_addon_for_chat_server_return_text"></label>
         </fieldset>
         <?php
     }

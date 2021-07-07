@@ -11,13 +11,18 @@
     background-color: #fff;
     padding: 10px;
 }
-div.pafc_product_item .product_title, div.pafc_product_item .product_stock {
+.pafc_product_item .product_title,
+.pafc_product_item .product_stock {
     color: #000;
 }
 .pafc_product_item .wrap_img {
     display: flex;
-    margin: 0 0 10px;
+    margin: 0;
     justify-content: center;
+}
+.pafc_product_item .wrap_img img{
+    width:100%;
+    margin-bottom:10px;
 }
 .pafc_product_item img {
     border-radius: 1.4em;

@@ -13,12 +13,12 @@
  * @package           product-addon-for-chat
  *
  * @wordpress-plugin
- * Plugin Name:       Product Addon For Chat
+ * Plugin Name:       Shop Search Addon with IBM Watson
  * Plugin URI:        http://example.com/product-addon-for-chat-uri/
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
- * Author:            SmartPipl
- * Author URI:        http://smartpipl.com/
+ * Version:           1.0.1
+ * Author:            IBM Cognitive Class
+ * Author URI:        https://cognitiveclass.ai/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       product-addon-for-chat

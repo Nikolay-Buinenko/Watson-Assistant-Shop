@@ -82,3 +82,7 @@
 .wrap_pr_add_chat .form-table th {
     width: 400px;
 }
+.wrap_pr_add_chat fieldset.view_column {
+    display: flex;
+    flex-direction: column;
+}

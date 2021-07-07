@@ -104,7 +104,8 @@ class Product_Addon_For_Chat_Public {
 
         $credentials = get_option('watson_product_addon_for_chat_credentials');
         $addon_status = (isset($credentials['enabled']) ? $credentials['enabled'] : 'true');
-        $search_command = (isset($credentials['search_command']) && $credentials['search_command'] != '' ? $credentials['search_command'] : '/search_product' );
+        //$search_command = (isset($credentials['search_command']) && $credentials['search_command'] != '' ? $credentials['search_command'] : '/search_product' );
+        $search_command = '/search_product';
 
         wp_localize_script( $this->plugin_name, 'data_global_var_product_addon',
             array(
@@ -115,17 +116,29 @@ class Product_Addon_For_Chat_Public {
         );
     }
 
+    public function add_addon_control_button($watsonconv_control_list){
+        $credentials = get_option('watson_product_addon_for_chat_credentials');
+        $enabled = (isset($credentials['show_search_button']) && $credentials['show_search_button'] == "true" ? true : false);
+        $input_text = isset($credentials['server_return_text']) ? $credentials['server_return_text'] : '';
+        if ( $enabled ) {
+            $watsonconv_control_list['product_addon_for_chat'] = array();
+            $watsonconv_control_list['product_addon_for_chat'][] = array("search product", "/search_product", __($input_text));
+        }
+        return $watsonconv_control_list;
+    }
+
     public function pafc_search_product() {
 
-        $message = $_POST['message'];
-        $search_command = $_POST['search_command'];
-        $split_message = explode($search_command, $message);
-        $search_query = trim($split_message[1]);
+//        $message = $_POST['message'];
+//        $search_command = $_POST['search_command'];
+//        $split_message = explode($search_command, $message);
+//        $search_query = trim($split_message[1]);
+        $search_query = $_POST['message'];
 
         $credentials = get_option('watson_product_addon_for_chat_credentials');
-        $show_product_links                    = (isset($credentials['product_links']) ? true : false);
-        $show_image_product                    = (isset($credentials['image_product']) ? true : false);
-        $show_count_of_items                   = (isset($credentials['count_of_items']) ? true : false);
+        $show_product_links                    = (isset($credentials['product_links']) ? $credentials['product_links'] : "true");
+        $show_image_product                    = (isset($credentials['image_product']) ? $credentials['image_product'] : "true");
+        $show_count_of_items                   = (isset($credentials['count_of_items']) ? $credentials['count_of_items'] : "true");
         $count_of_items_in_search_results      = (isset($credentials['count_of_items_in_search_results']) ? $credentials['count_of_items_in_search_results'] : 0 );
         $html_response = "";
 
@@ -143,17 +156,17 @@ class Product_Addon_For_Chat_Public {
                 $image = "";
                 $stock = "";
                 global $product;
-                if ( $show_count_of_items ) {
+                if ( $show_count_of_items == "true" ) {
                     $stock = __("Stock quantity: ") . $product->get_stock_quantity();
                     $stock = "<span class=\"product_stock\">$stock</span>";
                 }
-                if ( $show_image_product ) {
+                if ( $show_image_product == "true" ) {
                     $image_url = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ));
-                    $image = "<span class=\"wrap_img\"><img src=\"$image_url[0]\" alt=\"product_img\"></span>";
+                    $image = ($image_url[0]!='')?"<span class=\"wrap_img\"><img src=\"$image_url[0]\" alt=\"product_img\"></span>":'';
                 }
                 $product_link = get_permalink( get_the_ID() );
                 $product_title = get_the_title( get_the_ID() );
-                if ( $show_product_links ) {
+                if ( $show_product_links == "true" ) {
                     $html_response .= "<a href=\"$product_link\" target=\"_blank\" class=\"pafc_product_item\">
                         $image
                         <span class=\"product_title\">$product_title</span>
@@ -167,6 +180,8 @@ class Product_Addon_For_Chat_Public {
                     </div>";
                 }
             }
+        } else {
+            $html_response .= "No products found";
         }
 
         wp_reset_postdata();
